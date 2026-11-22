@@ -1,16 +1,22 @@
 {
-  "id": "coolcode-tool-template",
-  "title": "CoolCode Tool Starter",
-  "description": "A browser-only example that trims lines and removes exact duplicates.",
-  "category": "security",
-  "tags": ["text", "lines", "duplicates"],
-  "icon": "scan-search",
-  "url": "/coolcode-tool-template/",
-  "source": "https://github.com/jsdyer/coolcode-tool-template",
+  "id": "donationradar",
+  "title": "Donation Radar",
+  "description": "Explore reported federal contributions and compare return versions. Keep source corrections visible without guessing who a contributor is.",
+  "category": "disclosures",
+  "tags": [
+    "donationradar",
+    "disclosures",
+    "public data",
+    "history"
+  ],
+  "icon": "history",
+  "url": "/donationradar/",
+  "source": "https://github.com/jsdyer/donationradar",
   "hosting": "project",
   "access": "browser",
   "data_info": {
-    "mode": "local",
-    "detail": "The browser reads the text you paste and compares its lines."
+    "mode": "snapshot",
+    "detail": "Submitted and reviewed 2023 registered-party annual contribution records from Elections Canada.",
+    "cadence": "Weekly"
   }
 }

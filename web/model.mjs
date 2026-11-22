@@ -1,7 +1,3 @@
-// Keep transformations separate from the DOM so they can be tested directly.
-export function cleanLines(text) {
-  if (typeof text !== 'string') throw new TypeError('Expected text');
-  const lines = text.split(/\r\n|\r|\n/).map(line => line.trim()).filter(Boolean);
-  const unique = [...new Set(lines)];
-  return { text: unique.join('\n'), count: unique.length, removed: lines.length - unique.length };
-}
+import {counts,sum} from './shared.mjs';export const present=rows=>rows;
+export function distribution(rows){const bounds=[20,100,200,500,1000,2000],labels=['Below $20','$20–99.99','$100–199.99','$200–499.99','$500–999.99','$1,000–1,999.99','$2,000+'];const bins=labels.map(label=>({label,value:0}));for(const r of rows){if(!Number.isFinite(r.amount)||r.amount<0)continue;const i=bounds.findIndex(n=>r.amount<n);bins[i===-1?6:i].value++;}return bins;}
+export function analyse(rows,state,data){const comparison=new Map();for(const a of data.aggregates||[]){if(a.province!==state.province||state.facets.entity&&a.entity!==state.facets.entity||state.facets.kind&&a.kind!==state.facets.kind)continue;comparison.set(a.version,(comparison.get(a.version)||0)+a.amount_cents/100);}return{metrics:[{label:'Selected disclosed records',value:rows.length,note:'Not unique contributors'},{label:'Reported amount in selection',value:'$'+sum(rows,'amount').toLocaleString('en-CA',{maximumFractionDigits:2}),note:'One return version only'},{label:'Political entities selected',value:new Set(rows.map(r=>r.entity)).size,note:'Registered-party annual returns'},{label:'Period and return version',value:'2023 · '+state.version,note:'Province: '+state.province}],panels:[{title:'Contribution-record distribution',items:distribution(rows),note:'Amount of each reported record; not a legal disclosure-threshold test.'},{title:'Submitted versus reviewed aggregate cohort',items:[...comparison].map(([label,value])=>({label,value})),unit:' CAD',note:'Same province, entity and contribution-type filters; text search does not change this cohort comparison. No individual corrected-row pairing is inferred.'},{title:'Records by political entity',items:counts(rows,'entity')}]};}
