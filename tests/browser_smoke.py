@@ -18,7 +18,7 @@ with socketserver.TCPServer(('127.0.0.1',0),Handler) as server:
   page.locator('#detail').evaluate('(el)=>el.hidden=true')
   page.locator('body').press('Control+Home');(ROOT/'browser-checks').mkdir(exist_ok=True);page.screenshot(path=str(ROOT/'browser-checks/desktop.png'),full_page=True)
   page.set_viewport_size({'width':390,'height':844});page.screenshot(path=str(ROOT/'browser-checks/mobile.png'),full_page=True)
-  assert page.evaluate('document.documentElement.scrollWidth <= innerWidth+1'), 'Mobile viewport overflow'
+  assert page.evaluate('document.documentElement.scrollWidth <= innerWidth+1'), page.evaluate("Array.from(document.querySelectorAll('body *')).filter(el=>el.getBoundingClientRect().right>innerWidth+1 && !el.closest('.table-wrap, .heat-scroll, #history')).map(el=>({tag:el.tagName,cls:el.className,width:el.getBoundingClientRect().width,text:el.textContent.slice(0,120)})).slice(0,12)")
   assert not errors,errors
   browser.close()
  server.shutdown()
